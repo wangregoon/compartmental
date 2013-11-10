@@ -1,0 +1,103 @@
+\documentclass{paper}
+
+\include{preamble}
+ 
+\begin{document}
+ 
+\title{Literature Review on Nonnegative Dynamics, Compartmental Modeling, Vector Lyapunov Function
+and Vector Dissipativity Theory}
+\author{Regoon Wang, ChemE@UNSW} 
+
+
+\maketitle
+\begin{abstract}
+Nonnegative dynamical system models are derived from mass and energy balance considerations that
+involves dynamic states whose values are nonnegative. These model are widespread in biological
+and ecological sciences and play a key role in the understanding of these processes.An unified
+framework(linear \& nonlinear) involving compartmetal modeling, stability analysis and vector 
+dissipativity theory was developed in \cite{bern_comp,hadd_non,hadd_thermo_1,hadd_thermo_2}. 
+This work contains systematic review on these subjects and some rough ideas about their applications
+in chemical process control.
+\end{abstract} 
+
+\tableofcontents
+\section{Introduction}
+\section{Nonnegative dynamics}
+\begin{defi}
+Let $A\in \R{m\times n}$. Then $A$ is \tb{nonnegative} (resp., \tb{positive}) if $A_{ij}\geqslant 0$ (resp.,
+$A_{ij}>0$) for all $i=1,\cdots,m$ and $j=1,\cdots,n$.
+\end{defi}
+\begin{defi}
+Let $T>0$. A real function $\map{u}{[0,T]}{\R{m}}$ is a nonegative (resp., positive) function if
+$u(t)\GE 0$ (resp., $u(t)\gg 0$), which means $u_i(t)\geqslant 0$ (resp., $u_i(t)>0$) for $i=1,\cdots,m$.
+\end{defi}
+\begin{defi}
+Let $A\in \R{n\times n}$. $A$ is a \tb{Z-matrix} if $A_{ij}\leqslant 0,i,j=1,\cdots,n,i\neq j$. A is an
+\tb{M-matrix} (resp., nonsingular M-matrix) if A is a Z-matrix and all the principal minors of A are
+nonnegative (resp., positive). A is \tb{essentially nonnegative} if -A is a Z-matrix, which means
+$A_{ij}\geqslant 0,\forall i,j=1,\cdots,n,i\neq j$.
+\end{defi}
+\begin{lem} \label{lem1}
+Assume A is a Z-matrix. Then the following statement are equivalent:
+\begin{enumerate}
+\item[(i)]    A is an M-matrix.
+\item[(ii)]   $\exists \alpha>0, B\GE 0$ s.t. $\alpha > \rho(B)$ and $A=\alpha I-B$.
+\item[(iii)]  Re$\lambda\geq 0$, $\lambda\in \mathrm{spec}(A)$.
+\item[(iv)]   If $\lambda\in \mathrm{spec}(A)$, then either $\lambda=0$ or $\lambda>0$.
+\end{enumerate}
+Furthermore, in the case where A is a nonsigular Z-matrix, then the following statements are equivlent:
+\begin{enumerate}
+\item[(v)]    A is a nonsingular M-matrix.
+\item[(vi)]   det$(A)\neq0$ and $A^{-1}\GE 0$.
+\item[(vii)]  $y\in\R{n},y\GE 0$, then $\exists x\in\R{n},x\GE 0$ s.t. $Ax=y$.
+\item[(viii)] $\exists x\in\R{n},x\GE 0$, s.t. $Ax\gg 0$.
+\item[(ix)]   $\exists x\in\R{n},x\gg 0$, s.t. $Ax\gg 0$.
+\end{enumerate}
+\end{lem}
+Consider the linear dynamical system of the form
+\begin{equation}\label{sys1}
+\dot{x}=Ax,\qquad x(0)=x_0, t\geqslant 0
+\end{equation}
+\begin{lem}\label{lem2}
+Let $A\in \R{n\times n}$. $A$ is essentially nonegative iff $e^{At}$ is nonnegative for all $t\geqslant 0$.
+Furthermore, if A is essentially nonnegative and $x_0\GE 0$, then $x(t)\GE 0$ and Sys.\ref{sys1} is
+called \tb{linear nonnegative dynamical system}.
+\end{lem}
+\begin{defi}
+The quilibrium solution $x(t)=x_e$ of Sys.\ref{sys1} is 
+\begin{itemize}
+\item \tb{Lyapunov stable} if, $\forall\epsilon>0$,$\exists \delta=\delta(\epsilon)>0$ s.t. if $x_0\in 
+\BE \cap \RP$, then $x(t) \in \BE \cap \RP, t\geqslant 0$.
+\item \tb{semistable} if it is Lyapunove stable and $\exists \delta>0$ s.t. if $x_0\in \BE \cap \RP$,
+then $\lim\limits_{t\rightarrow\infty}x(t)$ exists and converges to a Lyapunov stable equilibrium point.
+\item \tb{asymptotically stable} if it is Lyapunov stable and $\exists \delta>0$ s.t. if $x_0\in \BE \cap
+\RP$, then $\lim\limits_{t\rightarrow\infty}x(t)=x_e$.
+\item \tb{globally asmptotically stable} if it is asymptotically stable respect to all $x_0\in\R{n}$.
+\end{itemize}
+\end{defi}
+\begin{thm}
+Let $A\in \R{n\times n}$ be essentially nonnegative. If $\exists p,r \in\R{n}$ s.t. $p\gg 0, r\GE 0$
+statisfy 
+\begin{equation}\label{en_cond}
+0=A^Tp+r
+\end{equation}
+then the following properties hold:
+\begin{enumerate}
+\item[(i)]    -A is an M-matrix.
+\item[(ii)]   if $\lambda\in\mathrm{spec}(A)$, then either $\lambda=0$ or $\lambda>0$.
+\item[(iii)]  ind$(A)\leqslant 1$, so A has generalized group inverse $A^\#$.
+\item[(iv)]   A is semistable and $\lim\limits_{t\rightarrow\infty}e^{At}=I-AA^{\#}\GE 0$.
+\item[(v)]    $\mathcal{R}(A)=\mathcal{N}(I-AA^{\#})$, $\mathcal{N}(A)=\mathcal{R}(I-AA^{\#})$.
+\item[(vi)]   $\int_{0}^{t}e^{A\\tau}\mathrm{d}\tau=A^\#(e^{At}-I)+(I-AA^\#)t,t\geqslant 0$.
+\item[(vii)]  A is nonsigular iff -A is a nonsigular M-matrix.
+\item[(viii)] if A is nonsigular, then A is asymptotical stable and $A^{-1}\leqslant\leqslant 0$.
+\end{enumerate}
+\end{thm}
+\section{Compartmental modeling}
+\section{Vector Lyapunove function}
+\section{Vector dissipativity theory}
+\section{Application in Chemical Process Control}
+\bibliographystyle{unsrt}
+\bibliography{nonnegative_dynamic}
+
+\end{document}
