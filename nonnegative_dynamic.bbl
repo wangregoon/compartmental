@@ -1,0 +1,26 @@
+\begin{thebibliography}{99}
+\bibitem{bern_comp}
+Dennis S. Bernstein, David C. Hyland.
+\newblock Compartmental modeling and second-moment analysis of state space systems.
+\newblock {\em SIAM J. MATRIX ANAL. APPL.}, Vol.14, No.3, pp.880-901, 1993.
+
+\bibitem{hadd_non}
+Wassim M. Haddad, VijaySekhar Chellaboina.
+\newblock Stability and dissipativity theory for nonnegative dynamical systems: 
+a unified analysis framework for biological and physiological systems. 
+\newblock {\em Nonlinear Analysis:Real World Applications}, 6(2005): 35-65.
+
+\bibitem{hadd_thermo1}
+Wassim M. Haddad.
+\newblock A Unification between Dynamical System Theory and Thermodynamics Involving
+an Energy, Mass, and Entropy State Space Formalism.A Unification between Dynamical 
+System Theory and Thermodynamics Involving an Energy, Mass, and Entropy State Space 
+Formalism.
+\newblock {\em Entropy}, 15(2013): 1821-1846.
+
+\bibitem{hadd_thermo2}
+Wassim M. Haddad, VijaySekhar Chellaboina, Sergey G. Nersesov.
+\newblock Thermodynamics and Large-scale Nonlinear Dynamical Systems: A Vector 
+Dissipative Systems Approach.
+\newblock {\em Dyn. Cont. Disc. Impl. Syst.}, Vol.19, pp.747-751, 2004.
+\end{thebibliography}
