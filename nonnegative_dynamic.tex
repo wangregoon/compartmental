@@ -31,7 +31,7 @@ and chemical reactions. A state-space dynamical system model that captures the k
 including its fundamental laws. So maybe, the compartmental modeling would be an alternative solution to the
 plantwide complexity of chemical process. And some control stragies combining dissipativity and MPC can be
 developed and form a distributed control framework.
-\section{Nonnegative dynamics}
+\section{Nonnegative Dynamics}
 \subsection{Mathematical Preliminaries}
 \begin{defi}
 Let $A\in \R{m\times n}$. Then $A$ is \tb{nonnegative} (resp., \tb{positive}) if $A_{ij}\geqslant 0$ (resp.,
@@ -152,8 +152,8 @@ p^Tf(x)<0,\lVert x\rVert<\epsilon\}$ and $\lVert x\rVert=\sum_{i=1}^{n}p_ix_i$. 
 subset of the domain of attraction.
 \end{enumerate}
 \end{thm}
-\section{Compartmental modeling}
-\subsection{General compartmental model}
+\section{Compartmental Modeling}
+\subsection{General Compartmental Model}
 Compartment acts like a container which allows mass or energy to flow in and out. It obeys
 the universial conservation law. Compartments can be interconnected to each other (as seen in 
 Fig.\ref{fig:comp}) and forms compartmetnal dynamic model which is useful in modeling 
@@ -222,8 +222,45 @@ written as
 where $J_q(x)$ is a skew-symmetric matrix function with $J_{q(i,j)}=a_{ij}x_j-a_{ji}x_i$, and $D(x)=\text{diag}[a_{11}x_1,
 \cdots,a_{qq}x_q]$ $\GE 0$. Hence, alinear compartmental system is a port-controlled hamiltonian system with a Hamiltonian
 $V(x)$ representing the total mass, $D(x)$ representing the outflow dissipation, and $w(t)$ representing the supplied flux. 
-%\section{Vector Lyapunove function}
-\section{Vector dissipativity theory}
+\subsection{Interconnected Thermodynamic Systems}
+To formulate state space thermodynamical model, consider the interconnected dynamical system shown in Fig.\ref{fig:comp}.
+Let $E_i=x_i$ denote the energy, $S_i=w_i$ denote the external power supplied to or extracted from the subsystem, $\phi_{ij}$
+denote the net instantaneous rate of energy flow from the $j$th subsystem to $i$th subsystem, and $\sigma_{ii}=a_{ii}$ denote 
+the instantaneous rate of energy dissipation from the subsystem to environment. An energy balance for each subsystem yields
+\begin{equation}\label{eq:pb}
+\dot{E}(t)=w(E(t))-d(E(t))+S(t),\quad E(t_0)=E_0,\quad t\geqslant t_0
+\end{equation}
+where $w_i(E(t))=\sum_{j=1,j\neq i}^{q}\phi_{ij}(E)$ and $d_i(E)=\sigma_{ii}(E)$. 
+Since thermodynamic compartmental model involves intercompartmental flows representing energy transfer between compartments, 
+we can use graph-theoretic notions with undirected graph topologies to capture the system interconnections. We define a
+connectivity matrix $C\in\R{q\times q}$ s.t. for $i\neq j$, $C_{ij}:=0$ if $\phi_{ij}(E)\equiv 0$ and $C_{ij}:=1$ otherwise,
+and $C_{ii}:=-\sum_{k=1,k\neq i}^{q}C_{ki}$. Recall that if rank$C=q-1$, then system is strongly connected and energy exchange
+is possible between any two subsystems.
+\begin{defi}
+A continuously differentiable, strictly concave function $\SE:\overline{\mathbb{R}}_{+}^{q}\rightarrow \mathcal{R}$ is 
+called the entropy function of the system if
+\begin{equation}\label{eq:t2}
+\left(\frac{\partial \SE}{\partial E_i}-\frac{\partial \SE}{\partial E_j}\right)\phi_{ij}(E)\geqslant 0, \quad i\neq j
+\end{equation}
+and $\frac{\partial \SE}{\partial E_i}=\frac{\partial \SE}{\partial E_j}$ iff $\phi_{ij}(E)=0$ with $C_{ij}=1$.
+\end{defi}
+\begin{prop}
+Consider the isolated ($S(t)\equiv 0, d(E)\equiv 0$) interconnected dynamical system with the power balance Eq.\ref{eq:pb}.
+Assume that rank$C=q-1$ and there exists an entropy function $\SE$. Then, $\sum_{j=1}^{q}\phi_{ij}(E)=0$ iff $
+\frac{\partial \SE}{\partial E_i}=\frac{\partial \SE}{\partial E_j}$. Furthermore, the set of nonnegative equilibrium states of
+Eq.\ref{eq:pb} is given by $\varepsilon_0:=\{E\in\overline{\mathbb{R}}_{+}^{q}: \frac{\partial \SE}{\partial E_i}=
+\frac{\partial \SE}{\partial E_j}\}$.
+\end{prop}
+\begin{thm}
+Consider the isolated ($S(t)\equiv 0, d(E)\equiv 0$) interconnected dynamical system with the power balance Eq.\ref{eq:pb}.
+Assume that rank$C=q-1$ and there exists an entropy function $\SE$. Then, the isolated system is globally semistable with
+Lyapunov function $V(E):=\SE(E_e)-S(E)-\lambda_e(e^TE_e-e^TE)$, where $\lambda_e:=\frac{\partial \SE}{\partial E_1}(E_e)$
+and $E_0=\frac{1}{q}ee^TE(t_0)$ denotes as the equivalent state.
+\end{thm}
+In classical thermodynamics, the reciprocal of the system temperature is defined as $T_i:=\left(\frac{\partial \SE}
+{\partial E_i}\right)^{-1}$. Eq.\ref{eq:t2} is a manifestation of the second law of thermodynamics and implies that the 
+energy flows from high temperature subsystem to low temperature one.
+\section{Vector Dissipativity Theory}
 Dissipativity theory provides a fundamental framework for the analysis and design of control systems using an input-output
 desciption based on system energy. The dissipation hypothesis on dynamical systems results in a fundamental constraint
 on their dynamic behavior wherein a disspative dynamical system can only deliver a fraction of its energy to its surroundings 
