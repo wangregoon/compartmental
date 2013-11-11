@@ -4,8 +4,7 @@
  
 \begin{document}
  
-\title{Literature Review on Nonnegative Dynamics, Compartmental Modeling, Vector Lyapunov Function
-and Vector Dissipativity Theory}
+\title{Literature Review on Nonnegative Dynamics, Compartmental Modeling and Vector Dissipativity Theory}
 \author{Regoon Wang, ChemE@UNSW} 
 
 
@@ -15,14 +14,25 @@ Nonnegative dynamical system models are derived from mass and energy balance con
 involves dynamic states whose values are nonnegative. These model are widespread in biological
 and ecological sciences and play a key role in the understanding of these processes.An unified
 framework(linear \& nonlinear) involving compartmetal modeling, stability analysis and vector 
-dissipativity theory was developed in \cite{bern_comp,hadd_non,hadd_thermo_1,hadd_thermo_2}. 
+dissipativity theory was developed in \cite{bern_comp,hadd_non,hadd_thermo1,hadd_thermo2}. 
 This work contains systematic review on these subjects and some rough ideas about their applications
 in chemical process control.
 \end{abstract} 
 
 \tableofcontents
 \section{Introduction}
+Chemical process dynamics involves mass recycle and heat intergration. Traditionally, the model is based on state
+space with interaction as the direct connection bewteen inputs and outputs of subsystem. This will lead to
+a complex generalized state space model whose phyical meaning is lost. When the system grows into plantwide
+complexity, it is not adequately to capture the real interconnection.
+
+The compartmental model is a natural way to describe energy flow model involving heat flow, mass flow, work energy, 
+and chemical reactions. A state-space dynamical system model that captures the key aspercts of thermodynamics, 
+including its fundamental laws. So maybe, the compartmental modeling would be an alternative solution to the
+plantwide complexity of chemical process. And some control stragies combining dissipativity and MPC can be
+developed and form a distributed control framework.
 \section{Nonnegative dynamics}
+\subsection{Mathematical Preliminaries}
 \begin{defi}
 Let $A\in \R{m\times n}$. Then $A$ is \tb{nonnegative} (resp., \tb{positive}) if $A_{ij}\geqslant 0$ (resp.,
 $A_{ij}>0$) for all $i=1,\cdots,m$ and $j=1,\cdots,n$.
@@ -54,6 +64,7 @@ Furthermore, in the case where A is a nonsigular Z-matrix, then the following st
 \item[(ix)]   $\exists x\in\R{n},x\gg 0$, s.t. $Ax\gg 0$.
 \end{enumerate}
 \end{lem}
+\subsection{Stability of linear case}
 Consider the linear dynamical system of the form
 \begin{equation}\label{sys1}
 \dot{x}=Ax,\qquad x(0)=x_0, t\geqslant 0
@@ -84,26 +95,99 @@ statisfy
 then the following properties hold:
 \begin{enumerate}
 \item[(i)]    -A is an M-matrix.
-\item[(ii)]   if $\lambda\in\mathrm{spec}(A)$, then either $\lambda=0$ or $\lambda>0$.
+\item[(ii)]   If $\lambda\in\mathrm{spec}(A)$, then either $\lambda=0$ or $\lambda>0$.
 \item[(iii)]  ind$(A)\leqslant 1$, so A has generalized group inverse $A^\#$.
 \item[(iv)]   A is semistable and $\lim\limits_{t\rightarrow\infty}e^{At}=I-AA^{\#}\GE 0$.
 \item[(v)]    $\mathcal{R}(A)=\mathcal{N}(I-AA^{\#})$, $\mathcal{N}(A)=\mathcal{R}(I-AA^{\#})$.
-\item[(vi)]   $\int_{0}^{t}e^{A\\tau}\mathrm{d}\tau=A^\#(e^{At}-I)+(I-AA^\#)t,t\geqslant 0$.
-\item[(vii)]  A is nonsigular iff -A is a nonsigular M-matrix.
-\item[(viii)] if A is nonsigular, then A is asymptotical stable and $A^{-1}\leqslant\leqslant 0$.
+\item[(vi)]   $\int_{0}^{t}e^{As}\mathrm{d}s=A^\#(e^{At}-I)+(I-AA^\#)t,t\geqslant 0$.
+\item[(vii)]  $\int_{0}^{t}e^{As}\mathrm{d}sP$ exists iff $P\in\mathcal(R)(A)$.
+\item[(viii)] If $P\in\mathcal(R)(A)$, then  $\int_{0}^{t}e^{As}\mathrm{d}sP=-A^\#P$.
+\item[(ix)]   If $P\in\mathcal(R)(A)$ and $P\GE 0$, then $-A^\#P\GE 0$.
+\item[(x)]    A is nonsigular iff -A is a nonsigular M-matrix.
+\item[(xi)]   If A is nonsigular, then A is asymptotical stable and $A^{-1}\leqslant\leqslant 0$.
+\end{enumerate}
+\end{thm}
+\begin{prop}
+Suppose that $x_0\GE 0$ and $P\GE 0$, then $x_e:=\lim\limits_{t\rightarrow \infty}x(t)$ exists
+iff $P\in\mathcal(R)(A)$ where $x_e=(I-AA^\#)x_0-A^\#P$. If, in addition, A is nonsingular, then
+$x_e=-A^{-1}P$.
+\end{prop}
+\begin{thm}
+Let A is essentially nonnegative. Then Sys.\ref{sys1} is asymptotically stable iff there exists a 
+positive diagonal matrix P and a positive-definite matrix R s.t. 
+\begin{equation}
+0=A^TP+PA+R
+\end{equation}
+\end{thm}
+\subsection{stability of nonlinear case}
+Consider the nonlinear nonnegative dynamical system
+\begin{equation}\label{sys:N1}
+\dot{x}(t)=f(x(t)),\quad x(0)=x_0,\quad t\in[0,T_{x_0}]
+\end{equation}
+where $x(t)\mathcal{D}$, $\mathcal{D}$ is an open subset of $\R{n}$ containning $\RP$, 
+$\map{f}{\mathcal{D}}{\R{n}}$ is locally Lipschitz. Furthermore, a subset $\D_{c}\subset \D$ is
+an invariant set with respect to Sys.\ref{sys:N1} if $\D_c$ contains the orbits of all its point.
+\begin{defi}[\tb{essentially nonnegative vector fields}]
+let $\map{f}{\mathcal{D}}{\R{n}}$. Then $f$ is \tb{essentially nonnegative} if $f_i(x)\geqslant 0$
+for all $i=1,\cdots,n$ and $x\in \RP$ s.t. $x_i=0$.
+\end{defi}
+\begin{prop}
+$\RP$ is an invariant set with respect to Sys.\ref{sys:N1} iff $f$ is essentially nonnegative.
+\end{prop}
+\begin{lem}
+Let $f(0)=0$ and $f$ is essentially nonnegative and continuously differentiable in $\RP$. Then,
+$A:=\frac{\partial f}{\partial x}\mid_{x=0}$ is essentially nonnegative.
+\end{lem}
+\begin{thm}
+Let $x(t)=x_e$ be an equilibrium point for Sys.\ref{sys:N1} and $f$ be essentially nonegative and 
+$A=\frac{\partial f}{\partial x}\mid_{x=x_e}$. Then the following statements hold:
+\begin{enumerate}
+\item[(i)] If Re$\lambda < 0$, where $\lambda\in\text{spec}(A)$, then the equilibrium solution of the 
+Sys.\ref{sys:N1} is asymptotically stable.
+\item[(ii)] If there exits $\lambda\in\text{spec}(A)$ s.t. Re$\lambda > 0$, then the equilibrium 
+solution of the Sys.\ref{sys:N1} is unstable.
+\item[(iii)] Let $x_e=0$, Re$\lambda < 0$, where $\lambda\in\text{spec}(A)$, let $p\gg 0$ be s.t.
+$A^Tp<<0$, and define $\D_A:=\{x\in\RP:p^Tx<\gamma\}$, where $\gamma:=\text{sup}\{\epsilon>0:
+p^Tf(x)<0,\lVert x\rVert<\epsilon\}$ and $\lVert x\rVert=\sum_{i=1}^{n}p_ix_i$. Then $\D_A$ is a
+subset of the domain of attraction.
 \end{enumerate}
 \end{thm}
 \section{Compartmental modeling}
+\subsection{General compartmental model}
 Compartment acts like a container which allows mass or energy to flow in and out. It obeys
 the universial conservation law. Compartments can be interconnected to each other (as seen in 
 Fig.\ref{fig:comp}) and forms compartmetnal dynamic model which is useful in modeling 
-large-scale system.
-\begin{figure}[h!]
+large-scale system. As shown in Fig.\ref{fig:comp}, let $x_i(t),t\geqslant 0, i=1,\cdots,q$,
+denotes the mass or energy state (and hence a nonnegative quantity) of the \ti{i}th compartment,
+let $\sigma_{ii}(x_i(t))\geqslant 0$ denote the loss effect of the \ti{i}th compartment, let $w_i(t)
+\geqslant 0$ denote the flus supplied to the \ti{i}th compartment, and let $\phi_{ij}(x)$ denote
+the net mass flow from the \ti{j}th compartment to \ti{i}th compartment which satisfies skew-symmetry
+constraint $\phi_{ij}(x)=-\phi_{ji}(x)$. Hence, the universal conservation law for the whole system
+yields a nonlinear comparmental model
+\begin{equation}\label{sys:n1}
+\dot{x}_i(t)=-\sigma_{ii}(x_i(t))+\sum\limits_{j=1,j\neq i}^{q}\phi_{ij}(x)+w_i(t),\quad t\geqslant 0,
+\quad i=1,\cdots,q
+\end{equation}
+Consider the linear case, let $\sigma_{ii}(x_i(t))=a_{ii}x_i(t)$,$\phi_{ij}(x)=a_{ij}x_j(t)-a_{ji}x_i(t)$,
+where $a_{ii}$ denotes the loss coefficient and $a_{ij},i\neq j$ denotes the transfer coefficient, 
+$a_{ij}\geqslant 0$. So the linear compartmental model can be expressed as
+\begin{equation} \label{sys:L2}
+\dot{x}(t)=Ax(t)+w(t),\quad x(0)=x_0, \quad t\geqslant 0
+\end{equation} 
+where $x(t)=[x_1(t),\cdots,x_q(t)]^T,w(t)=[w_1(t),\cdots,w_q(t)]^T$,
+\begin{equation}\label{eq:A}
+A_{ij}=
+\begin{cases}
+-\sum_{k=1}^{q}a_{ki} & \text{if } i = j \\
+a_{ij} & \text{if } i \neq j
+\end{cases}
+\end{equation}
+\begin{figure}[!h]
 \centering
 \setlength{\unitlength}{0.5cm}
 \begin{picture}(9,8)
 \put(0,3){\vector(0,-1){3}}
-\put(0.2,0.5){$a_{ii}(x_i(t))$}
+\put(0.2,0.5){$\sigma_{ii}(x_i(t))$}
 \put(0,4){\circle{2}}
 \put(-0.6,3.8){$x_i(t)$}
 \put(0,8){\vector(0,-1){3}}
@@ -111,7 +195,7 @@ large-scale system.
 \put(0.7,3.3){\vector(1,0){7.6}}
 \put(3.5,2.7){$\phi_{ji}(x)$}
 \put(9,3){\vector(0,-1){3}}
-\put(5.9,0.5){$a_{jj}(x_j(t))$}
+\put(5.9,0.5){$\sigma_{jj}(x_j(t))$}
 \put(9,4){\circle{2}}
 \put(8.4,3.8){$x_j(t)$}
 \put(8.3,4.7){\vector(-1,0){7.6}}
@@ -121,9 +205,104 @@ large-scale system.
 \end{picture}
 \caption{Compartmental interconnected subsystem model}\label{fig:comp}
 \end{figure}
-\section{Vector Lyapunove function}
+Note that Eq.\ref{eq:A} implies that $\sum_{i=1}^{q}A_{ij}\leqslant 0$. Thus, a compartmental system (with
+$w(t)\equiv 0$) satisfies $\dot{x}_i(t)\leqslant 0$ whenever $x_j(t)=0,j\neq i$, while a nonnegative system 
+(with $w(t)\equiv 0$) statisfies $\dot{x}_i(t)\geqslant 0$ whenever $x_i(t)=0$. Note that A is an essentially
+nonnegative matrix and the Sys.\ref{sys:L2} is a nonnegative dynamical system. Furthermore, note that 
+$A^Te=[-a_{11},\cdots,-a_{qq}]^T$, and hence with $p=e=[1,\cdots,1]^T$ and $r=-A^Te\GE 0$ it follows that 
+condition (\ref{en_cond}) is satisfied which implies that the Sys.\ref{sys:L2} (with $w(t)\equiv 0$) is semistable
+if A is singular and asymptotically stable if A is nonsingular. In both case, $V(x)=e^Tx=\sum_{i=1}^{q}x_i$ denoting
+the total mass of the system serves as a Lyapunov function for the undisturbed ($w(t)\equiv 0$)  system with
+$\dot{V}=\sum_{j=1}^{q}(\sum_{i=1}^{q}A_{ij})x_j=-\sum_{i=1}^{q}a_{ii}x_i\leqslant 0, x\in \overline{\mathbb{R}}_{+}^{q}$.
+Alternatively, in the case where $a_{ii}\neq 0$ and $w_i(t)\neq 0$, it follows that Sys.\ref{sys:L2} cab be equivalently
+written as 
+\begin{equation}
+\dot{x}(t)=[J_q(x(t))-D(x(t))]\left(\frac{\partial V}{\partial x}\right)^T+w(t),\quad x(0)=x_0,\quad t\geqslant 0
+\end{equation}
+where $J_q(x)$ is a skew-symmetric matrix function with $J_{q(i,j)}=a_{ij}x_j-a_{ji}x_i$, and $D(x)=\text{diag}[a_{11}x_1,
+\cdots,a_{qq}x_q]$ $\GE 0$. Hence, alinear compartmental system is a port-controlled hamiltonian system with a Hamiltonian
+$V(x)$ representing the total mass, $D(x)$ representing the outflow dissipation, and $w(t)$ representing the supplied flux. 
+%\section{Vector Lyapunove function}
 \section{Vector dissipativity theory}
+Dissipativity theory provides a fundamental framework for the analysis and design of control systems using an input-output
+desciption based on system energy. The dissipation hypothesis on dynamical systems results in a fundamental constraint
+on their dynamic behavior wherein a disspative dynamical system can only deliver a fraction of its energy to its surroundings 
+and can only store a fraction of the work done to it. Since complex multi-physical system has numerous input-output 
+properties related to conservation, dissipation, and trasport of mass and energy, it seems natural to extend dissipativity 
+theory to nonnegative and compartmental models which themselves behave in accordance to conservation laws. Specifically, 
+consider the dynamical systems of the from
+\begin{align}\label{sys:d1} 
+\dot{x}(t)&=f(x)+g(x)u, \quad x(0)=x_0, \quad t\geqslant 0 \\
+y(t)&=h(x)+j(x)u \nonumber
+\end{align}
+\begin{defi}
+The Sys.\ref{sys:d1} is nonnegative if for every $x_0\in\RP$ and $u(t)\GE 0$, the solution $x(t)$ and the output $y(t)$ are
+nonnegative.
+\end{defi}
+\begin{prop}
+If $f$ is essentially nonnegative, $h(x),g(x),j(x)\GE 0, x\in \RP$, then Sys.\ref{sys:d1} is nonnegative.
+\end{prop}
+\begin{defi}
+The Sys.\ref{sys:d1} is exponentially dissipative (resp., dissipative) with respect to the supply rate $s:\overline{\mathbb{R}}_{+}^{m}
+\times\overline{\mathbb{R}}_{+}^{l}\rightarrow \mathbb{R}$ if there exists a continuous nonnegative-definite function 
+$V_s:\overline{\mathbb{R}}_{+}^{n}\rightarrow \overline{\mathbb{R}}_{+}$ called a storage function and a scalar $\epsilon>0$
+(resp., $\epsilon=0$) s.t. $V_s(0)=0$ and the dissipation inequality
+\begin{equation}
+e^{\epsilon t_2}V_s(x(t_2))\leqslant e^{\epsilon t_1}V_s(x(t_1)) + \int_{t_1}^{t_2}e^{\epsilon t}s(u(t),y(t))\text{d}t, \quad t_2\geqslant t_1
+\end{equation}
+If $V_s(\cdot)$ is continuously differentiable, then the dissipation inequality is equivalent to 
+\begin{equation}
+\dot{V}_s(x(t))+\epsilon V_s(x(t))\leqslant s(u(t),y(t)), \quad t\geqslant 0
+\end{equation}
+\end{defi}
+\begin{defi}
+A nonnegative dynamical system is zero-state observable if for all $x\in\overline{\mathbb{R}}_{+}$, $u(t)\equiv 0$ and $y(t)
+\equiv 0$ implies $x(t)\equiv 0$. A nonnegative dynamical system is reachable if for all $x\in\mathbb{R}_+^n$, there exist a finite time
+$t_i\leqslant 0$, square integrable input $u(t)$ defined on $[t_i,0]$, s.t. the state $x(t)$ can be driven from $x(t_i)=0$ to $x(0)=x_0$.
+\end{defi}
+\begin{thm}
+The Sys.\ref{sys:d1} is exponentially dissipative (resp., dissipative) with respect to the supply rate $s(u,y)=q^Ty+r^Tu$ iff
+there exists functions $V_s,l,W:\overline{\mathbb{R}}_{+}^n\rightarrow \overline{\mathbb{R}}_{+}$, and a scalar $\epsilon>0$
+(resp., $\epsilon =0$) s.t. $V_s(\cdot)$ is continuously differentiable, $V_s(0)=0$, and for all $x\in\overline{\mathbb{R}}_{+}^n$,
+\begin{align}
+0&=V'_s(x)f(x)+\epsilon V_s(x)-q^Th(x)+l(x) \\
+0&=V'_s(x)g(x)-q^Tj(x)-r^T+W^T(x) \nonumber
+\end{align}
+\end{thm}
+We begin by considering the nonnegative dynamical system with the nonlinear nonegative dynamical feedback system given by
+\begin{align}\label{sys:dc}
+\dot{x}_c(t)&=f_c(x_c(t))+g_c(x_c(t))u_c(t),\quad x_c(0)=x_{c0},\quad t\geqslant 0\\
+y_c(t)&=h_c(x_c(t)) \nonumber
+\end{align}
+where $f_c$ is essentially nonnegative, $g_c(x_c),h_c(x_c)\GE 0$.
+\begin{thm}
+Consider the Sys.\ref{sys:d1} and Sys.\ref{sys:dc}, assume Sys.\ref{sys:d1} is dissipative with respect to the linear supply rate
+$s(u,y)=q^Ty+r^Tu$ and with a positive-definite storage function $V_s(\cdot)$, and assume that Sys.\ref{sys:dc} is dissipative 
+with respect to the linear supply rate $s_c(u_c,y_c)=q_c^Ty_c+r_c^Tu_c$ and with a positive-definite storage function $V_{sc}(\cdot)$.
+Then the following statements hold:
+\begin{enumerate}
+\item[(i)]   If there exists a scalar $\sigma>0$ s.t. $q+\sigma q_c\LE 0$ and $r+\sigma q_c\LE 0$, then the positive feedback interconnection
+is Lyapunove stable.
+\item[(ii)]  If these two systems are zero-stable observable and there exists a scalar $\sigma>0$ s.t. $q+\sigma r_c<<0$ and 
+$r+\sigma q_c<<0$, then the positive feedback interconnection is asympototically stable.
+\item[(iii)] If Sys.\ref{sys:d1} is zero-state observable and Sys.\ref{sys:dc} is exponentially dissipative, and there exists 
+a scalar $\sigma>0$ s.t. $q+\sigma q_c\LE 0$ and $r+\sigma q_c\LE 0$, then the positive feedback interconnection is asympototically stable.
+\item[(iv)]  If Sys.\ref{sys:d1} is exponentially dissipative, Sys.\ref{sys:dc} is exponentially dissipative and there exists 
+a scalar $\sigma>0$ s.t. $q+\sigma q_c\LE 0$ and $r+\sigma q_c\LE 0$, then the positive feedback interconnection is asympototically stable.
+\end{enumerate}
+\end{thm}
+Consider the feedback nonnegative time-varying input nonlinearity $\sigma(\cdot,\cdot)\in\Phi$,where
+\begin{align}
+\Phi:=&\lbrace\sigma:\overline{\mathbb{R}}_{+}\times\overline{\mathbb{R}}_{+}^l\rightarrow \overline{\mathbb{R}}_{+}^m: 
+\sigma(.,0)=0,\text{ }0\GE\sigma(t,y)\GE My,\text{ } y\in\overline{\mathbb{R}}_{+}^l, \nonumber \\
+\qquad &\text{a.e. } t\geqslant 0, \text{ and } \sigma(\cdot,y) \text{ is Lebesgue measurable,}, M>>0 \rbrace
+\end{align}
+\begin{thm}
+Consider Sys.\ref{sys:d1} is zero-state observable and exponentially dissipative with respect to the supply rate $s(u,y)=e^Tu-e^TMy$, where
+$M>>0$. Then the positive feedback interconnection of Sys.\ref{sys:d1} and $\sigma(\cdot,\cdot)$ is globally asymptotically stable.
+\end{thm}
 \section{Application in Chemical Process Control}
+
 \bibliographystyle{unsrt}
 \bibliography{nonnegative_dynamic}
 
