@@ -15,21 +15,21 @@ involves dynamic states whose values are nonnegative. These model are widespread
 and ecological sciences and play a key role in the understanding of these processes.An unified
 framework(linear \& nonlinear) involving compartmetal modeling, stability analysis and vector 
 dissipativity theory was developed in \cite{bern_comp,hadd_non,hadd_thermo1,hadd_thermo2}. 
-This work contains systematic review on these subjects and some rough ideas about their applications
-in chemical process control.
+This work contains systematic review on these subjects and some rough ideas about their future
+applications in chemical process control.
 \end{abstract} 
 
 \tableofcontents
 \section{Introduction}
 Chemical process dynamics involves mass recycle and heat intergration. Traditionally, the model is based on state
-space with interaction as the direct connection bewteen inputs and outputs of subsystem. This will lead to
+space with interaction modeled as the direct connection bewteen inputs and outputs of subsystem. This will lead to
 a complex generalized state space model whose phyical meaning is lost. When the system grows into plantwide
 complexity, it is not adequately to capture the real interconnection.
 
 The compartmental model is a natural way to describe energy flow model involving heat flow, mass flow, work energy, 
-and chemical reactions. A state-space dynamical system model that captures the key aspercts of thermodynamics, 
+and chemical reactions. A state-space dynamical system model that captures the key aspects of thermodynamics, 
 including its fundamental laws. So maybe, the compartmental modeling would be an alternative solution to the
-plantwide complexity of chemical process. And some control stragies combining dissipativity and MPC can be
+plant-wide complexity of chemical process. And the control approach combining dissipativity and MPC can be
 developed and form a distributed control framework.
 \section{Nonnegative Dynamics}
 \subsection{Mathematical Preliminaries}
@@ -38,7 +38,7 @@ Let $A\in \R{m\times n}$. Then $A$ is \tb{nonnegative} (resp., \tb{positive}) if
 $A_{ij}>0$) for all $i=1,\cdots,m$ and $j=1,\cdots,n$.
 \end{defi}
 \begin{defi}
-Let $T>0$. A real function $\map{u}{[0,T]}{\R{m}}$ is a nonegative (resp., positive) function if
+Let $T>0$. A real function $\map{u}{[0,T]}{\R{m}}$ is a nonnegative (resp., positive) function if
 $u(t)\GE 0$ (resp., $u(t)\gg 0$), which means $u_i(t)\geqslant 0$ (resp., $u_i(t)>0$) for $i=1,\cdots,m$.
 \end{defi}
 \begin{defi}
@@ -55,7 +55,7 @@ Assume A is a Z-matrix. Then the following statement are equivalent:
 \item[(iii)]  Re$\lambda\geq 0$, $\lambda\in \mathrm{spec}(A)$.
 \item[(iv)]   If $\lambda\in \mathrm{spec}(A)$, then either $\lambda=0$ or $\lambda>0$.
 \end{enumerate}
-Furthermore, in the case where A is a nonsigular Z-matrix, then the following statements are equivlent:
+Furthermore, in the case where A is a nonsingular Z-matrix, then the following statements are equivlent:
 \begin{enumerate}
 \item[(v)]    A is a nonsingular M-matrix.
 \item[(vi)]   det$(A)\neq0$ and $A^{-1}\GE 0$.
@@ -70,12 +70,12 @@ Consider the linear dynamical system of the form
 \dot{x}=Ax,\qquad x(0)=x_0, t\geqslant 0
 \end{equation}
 \begin{lem}\label{lem2}
-Let $A\in \R{n\times n}$. $A$ is essentially nonegative iff $e^{At}$ is nonnegative for all $t\geqslant 0$.
+Let $A\in \R{n\times n}$. $A$ is essentially nonnegative iff $e^{At}$ is nonnegative for all $t\geqslant 0$.
 Furthermore, if A is essentially nonnegative and $x_0\GE 0$, then $x(t)\GE 0$ and Sys.\ref{sys1} is
 called \tb{linear nonnegative dynamical system}.
 \end{lem}
 \begin{defi}
-The quilibrium solution $x(t)=x_e$ of Sys.\ref{sys1} is 
+The equilibrium solution $x(t)=x_e$ of Sys.\ref{sys1} is 
 \begin{itemize}
 \item \tb{Lyapunov stable} if, $\forall\epsilon>0$,$\exists \delta=\delta(\epsilon)>0$ s.t. if $x_0\in 
 \BE \cap \RP$, then $x(t) \in \BE \cap \RP, t\geqslant 0$.
@@ -103,7 +103,7 @@ then the following properties hold:
 \item[(vii)]  $\int_{0}^{t}e^{As}\mathrm{d}sP$ exists iff $P\in\mathcal(R)(A)$.
 \item[(viii)] If $P\in\mathcal(R)(A)$, then  $\int_{0}^{t}e^{As}\mathrm{d}sP=-A^\#P$.
 \item[(ix)]   If $P\in\mathcal(R)(A)$ and $P\GE 0$, then $-A^\#P\GE 0$.
-\item[(x)]    A is nonsigular iff -A is a nonsigular M-matrix.
+\item[(x)]    A is nonsingular iff -A is a nonsigular M-matrix.
 \item[(xi)]   If A is nonsigular, then A is asymptotical stable and $A^{-1}\leqslant\leqslant 0$.
 \end{enumerate}
 \end{thm}
@@ -124,7 +124,7 @@ Consider the nonlinear nonnegative dynamical system
 \begin{equation}\label{sys:N1}
 \dot{x}(t)=f(x(t)),\quad x(0)=x_0,\quad t\in[0,T_{x_0}]
 \end{equation}
-where $x(t)\mathcal{D}$, $\mathcal{D}$ is an open subset of $\R{n}$ containning $\RP$, 
+where $x(t)\mathcal{D}$, $\mathcal{D}$ is an open subset of $\R{n}$ containing $\RP$, 
 $\map{f}{\mathcal{D}}{\R{n}}$ is locally Lipschitz. Furthermore, a subset $\D_{c}\subset \D$ is
 an invariant set with respect to Sys.\ref{sys:N1} if $\D_c$ contains the orbits of all its point.
 \begin{defi}[\tb{essentially nonnegative vector fields}]
@@ -139,7 +139,7 @@ Let $f(0)=0$ and $f$ is essentially nonnegative and continuously differentiable 
 $A:=\frac{\partial f}{\partial x}\mid_{x=0}$ is essentially nonnegative.
 \end{lem}
 \begin{thm}
-Let $x(t)=x_e$ be an equilibrium point for Sys.\ref{sys:N1} and $f$ be essentially nonegative and 
+Let $x(t)=x_e$ be an equilibrium point for Sys.\ref{sys:N1} and $f$ be essentially nonnegative and 
 $A=\frac{\partial f}{\partial x}\mid_{x=x_e}$. Then the following statements hold:
 \begin{enumerate}
 \item[(i)] If Re$\lambda < 0$, where $\lambda\in\text{spec}(A)$, then the equilibrium solution of the 
@@ -155,7 +155,7 @@ subset of the domain of attraction.
 \section{Compartmental Modeling}
 \subsection{General Compartmental Model}
 Compartment acts like a container which allows mass or energy to flow in and out. It obeys
-the universial conservation law. Compartments can be interconnected to each other (as seen in 
+the universal conservation law. Compartments can be interconnected to each other (as seen in 
 Fig.\ref{fig:comp}) and forms compartmetnal dynamic model which is useful in modeling 
 large-scale system. As shown in Fig.\ref{fig:comp}, let $x_i(t),t\geqslant 0, i=1,\cdots,q$,
 denotes the mass or energy state (and hence a nonnegative quantity) of the \ti{i}th compartment,
@@ -207,7 +207,7 @@ a_{ij} & \text{if } i \neq j
 \end{figure}
 Note that Eq.\ref{eq:A} implies that $\sum_{i=1}^{q}A_{ij}\leqslant 0$. Thus, a compartmental system (with
 $w(t)\equiv 0$) satisfies $\dot{x}_i(t)\leqslant 0$ whenever $x_j(t)=0,j\neq i$, while a nonnegative system 
-(with $w(t)\equiv 0$) statisfies $\dot{x}_i(t)\geqslant 0$ whenever $x_i(t)=0$. Note that A is an essentially
+(with $w(t)\equiv 0$) satisfies $\dot{x}_i(t)\geqslant 0$ whenever $x_i(t)=0$. Note that A is an essentially
 nonnegative matrix and the Sys.\ref{sys:L2} is a nonnegative dynamical system. Furthermore, note that 
 $A^Te=[-a_{11},\cdots,-a_{qq}]^T$, and hence with $p=e=[1,\cdots,1]^T$ and $r=-A^Te\GE 0$ it follows that 
 condition (\ref{en_cond}) is satisfied which implies that the Sys.\ref{sys:L2} (with $w(t)\equiv 0$) is semistable
@@ -220,7 +220,7 @@ written as
 \dot{x}(t)=[J_q(x(t))-D(x(t))]\left(\frac{\partial V}{\partial x}\right)^T+w(t),\quad x(0)=x_0,\quad t\geqslant 0
 \end{equation}
 where $J_q(x)$ is a skew-symmetric matrix function with $J_{q(i,j)}=a_{ij}x_j-a_{ji}x_i$, and $D(x)=\text{diag}[a_{11}x_1,
-\cdots,a_{qq}x_q]$ $\GE 0$. Hence, alinear compartmental system is a port-controlled hamiltonian system with a Hamiltonian
+\cdots,a_{qq}x_q]$ $\GE 0$. Hence, a linear compartmental system is a port-controlled hamiltonian system with a Hamiltonian
 $V(x)$ representing the total mass, $D(x)$ representing the outflow dissipation, and $w(t)$ representing the supplied flux. 
 \subsection{Interconnected Thermodynamic Systems}
 To formulate state space thermodynamical model, consider the interconnected dynamical system shown in Fig.\ref{fig:comp}.
@@ -236,7 +236,7 @@ we can use graph-theoretic notions with undirected graph topologies to capture t
 connectivity matrix $C\in\R{q\times q}$ s.t. for $i\neq j$, $C_{ij}:=0$ if $\phi_{ij}(E)\equiv 0$ and $C_{ij}:=1$ otherwise,
 and $C_{ii}:=-\sum_{k=1,k\neq i}^{q}C_{ki}$. Recall that if rank$C=q-1$, then system is strongly connected and energy exchange
 is possible between any two subsystems.
-\begin{defi}
+\begin{defi}\label{def:entropy}
 A continuously differentiable, strictly concave function $\SE:\overline{\mathbb{R}}_{+}^{q}\rightarrow \mathcal{R}$ is 
 called the entropy function of the system if
 \begin{equation}\label{eq:t2}
@@ -255,19 +255,109 @@ Eq.\ref{eq:pb} is given by $\varepsilon_0:=\{E\in\overline{\mathbb{R}}_{+}^{q}: 
 Consider the isolated ($S(t)\equiv 0, d(E)\equiv 0$) interconnected dynamical system with the power balance Eq.\ref{eq:pb}.
 Assume that rank$C=q-1$ and there exists an entropy function $\SE$. Then, the isolated system is globally semistable with
 Lyapunov function $V(E):=\SE(E_e)-S(E)-\lambda_e(e^TE_e-e^TE)$, where $\lambda_e:=\frac{\partial \SE}{\partial E_1}(E_e)$
-and $E_0=\frac{1}{q}ee^TE(t_0)$ denotes as the equivalent state.
+and $E_e=\frac{1}{q}ee^TE(t_0)$ denotes as the equivalent state.
 \end{thm}
 In classical thermodynamics, the reciprocal of the system temperature is defined as $T_i:=\left(\frac{\partial \SE}
 {\partial E_i}\right)^{-1}$. Eq.\ref{eq:t2} is a manifestation of the second law of thermodynamics and implies that the 
 energy flows from high temperature subsystem to low temperature one.
+\subsection{Gibbs and Helmoholtz Free Energy}
+According to the classical thermodynamics, an additional (deformation) state representing subsystem volumes in order to
+introduce the notion of work into our thermodynamically consistent state space energy flow model. The rate of work done
+by the subsystem to environment is denoted by $d_{wi}$, the rate of work done by its environment is denoted by $S_{wi}$,
+the volume of the subsystem is $V_i$ and the pressure $p_i(E,V)$. The net work done by each subsystem on the environment
+satisfies 
+\begin{equation}
+p_i(E,V)\text{d}V_i=(d_{wi}(E,V)-S_{wi}(t)\text{d}t
+\end{equation} 
+The definition of entropy in the presence of work remains the same as in Definition \ref{def:entropy} with $\SE(E)$ 
+replaced by $\SE(E,V)$. Note that 
+\begin{align}
+\frac{\diff \SE}{\diff t}&=\frac{\partial \SE}{\partial E_i}\frac{\diff E_i}{\diff t} +\frac{\partial \SE}{\partial V_i}
+\frac{\diff V_i}{\diff t}  \\
+p_i&(E,V)=\left(\frac{\partial \SE}{\partial E_i}\right)^{-1}\left(\frac{\partial\SE}{\partial V_i}\right) 
+\end{align}
+In the presence of work energy, the power balance Eq.\ref{eq:pb} takes the new form involving energy and deformation states
+\begin{eqnarray}
+\dot{E}&=w(E,V)-d_w(E,V)+S_w(t)-d(E,V)+S(t) \label{eq:e1} \\ 
+\dot{V}&=D(E,V)(d_w(E,V)-S_w(t)) \label{eq:v1}
+\end{eqnarray}
+where $D(E,V):=\text{diag}\left[\left(\frac{\partial \SE}{\partial E_i}\right)^{-1}\left(\frac{\partial\SE}{\partial V_i}\right)\right]$
+and $\left(\frac{\partial \SE}{\partial V}\right)D(E,V)=\left(\frac{\partial \SE}{\partial E}\right)$. Then the fundamental 
+law of thermodynamics can be developed from Eq.(\ref{eq:e1},\ref{eq:v1})
+\begin{eqnarray}
+\text{First Law:}&\delta U=\diff Q - \diff W \\
+\text{Second Law:}&\diff \SE\geqslant \sum\limits_{i=1}^{q}\frac{\diff Q_i}{\diff T_i} 
+\end{eqnarray}
+Next, we define the Gibbs free energy, the Helmholtz free energy, and the enthalpy functions for the interconnected dynamical
+system. The Gibbs free energy is defined by
+\begin{equation}
+G(E,V):=e^TE-\sum\limits_{i=1}^{q}\left(\frac{\partial \SE}{\partial E_i}\right)^{-1}\SE_i(E_i,V_i)+
+\sum\limits_{i=1}^{q}\left(\frac{\partial \SE}{\partial E_i}\right)^{-1}\left(\frac{\partial\SE}{\partial V_i}\right)V_i
+\end{equation}
+the Helmholtz free energy is defined by
+\begin{equation}
+F(E,V):=e^TE-\sum\limits_{i=1}^{q}\left(\frac{\partial \SE}{\partial E_i}\right)^{-1}\SE_i(E_i,V_i)
+\end{equation}
+and the enthalpy is defined by
+\begin{equation}
+H(E,V):=e^TE+\sum\limits_{i=1}^{q}\left(\frac{\partial \SE}{\partial E_i}\right)^{-1}\left(\frac{\partial\SE}{\partial V_i}\right)V_i
+\end{equation}
+Note that the above definitions are consistent with the classical thermodynamic difinitions given by $G(E,V)=U+pV-TS$, $F(E,V)=U-TS$,
+and $H(E,V)=U+pV$.
+\subsection{Chemical Potential}
+In chemical reaction, an additional mass balance is included for addressing conservation of energy as well as conservation of mass.
+This additional mass conservation equation would involve the law of mass-action enforce proportionality between a particular reaction
+rate and the concentrations of the reactants. Consider chemical reaction networks described by
+\begin{equation}
+\sum\limits_{j=1}^{q}A_{ij}X_j\overset{k_i}{\longrightarrow} \sum\limits_{j=1}^{q}B_{ij}X_j
+\end{equation}
+where $A_{ij},B_{ij}$ are the stoichiometric coefficients and $k_i$ denotes the reaction rate. It can be written in a compactly in 
+matrix-vector form as 
+\begin{equation}\label{eq:chem}
+AX\overset{k}{\longrightarrow} BX
+\end{equation}
+Let $n_j$ denote the mole number of the $j$th species. Invoking the law of mass-action, a reaction in which all of the stoichiometric 
+coefficients of the reactants are one, the rate of reaction is proportional to the product of the concentrations of the reactants, the 
+species quantities change 
+\begin{equation}
+\dot{n}(t)=(B-A)^TKn^A(t),\quad n(0)=n_0,\quad t\geqslant t_0
+\end{equation}
+where $K:=\text{diag}[k_1,\cdots,k_r]$ and $n^A:=\left[\Pi_{j=1}^qn_j^{A_{1j}},\cdots,\Pi_{j=1}^qn_j^{A_{rj}}\right]^T$. Furthermore,
+let $M_j>0$ denote the molar mass of the $j$th species, let $m_j=M_jn_j$ denote the mass of the $j$th species. Then, using the transformation
+$m(t)=Mn(t)$ where $M:=\text{diag}[M_1,\cdots,M_q]$, the mole balance equation can be rewritten as the mass balance
+\begin{equation}
+\dot{m}(t)=M(B-A)^T\tilde{K}m^A(t)
+\end{equation}
+where $\tilde{K}:=\text{diag}\left[\frac{k_1}{\Pi_{j=1}^qM_j^{A_{1j}}},\cdots,\frac{k_1}{\Pi_{j=1}^qM_j^{A_{rj}}}\right]$. In the absence
+of nuclear reactions, the total mass of the species during each reaction is conserved
+\begin{equation}
+e^TM(B-A)^T=0
+\end{equation}
+The chemical potential has a strong connection with the second law of thermodynamics in that every process in nature evolves from 
+a state of higher chemical potential towards a state of lower chemical potential. It was postulated by Gibbs that the change
+in energy of a homogeneous substance is proportional to the change in mass of this substance with the coefficient of proportionality
+given by the chemical potential of the substance.
+\begin{align}
+\dot{E}&=w(E)+P(E,m)M(B-A)^T\tilde{K}m^A(t)-d(E)+S(t) \\
+\dot{m}&=M(B-A)^T\tilde{K}m^A(t)
+\end{align}
+where $P(E,m):=\text{diag}\left[\mu_1(E,m),\cdots,\mu_q(E,m)\right]$ and $\mu_i(\cdot,\cdot)$ is the chemical potential of a unit mass.
+We assume that if $E_j=0$, then $\mu_j(E,m)=0$.
+\begin{note}
+For the chemical reaction network with mass balance, assume that $\mu(E,m)>>0$ for all $E\neq 0$ and 
+\begin{equation}
+\nu(E,m)=(A-B)M\mu(E,m)\GE 0
+\end{equation}
+where $\mu(E,m)$ is the vector of chemical potential of the substance and $\nu(E,m)$ is the affinity vector.
+\end{note}
 \section{Vector Dissipativity Theory}
 Dissipativity theory provides a fundamental framework for the analysis and design of control systems using an input-output
-desciption based on system energy. The dissipation hypothesis on dynamical systems results in a fundamental constraint
+description based on system energy. The dissipation hypothesis on dynamical systems results in a fundamental constraint
 on their dynamic behavior wherein a disspative dynamical system can only deliver a fraction of its energy to its surroundings 
 and can only store a fraction of the work done to it. Since complex multi-physical system has numerous input-output 
-properties related to conservation, dissipation, and trasport of mass and energy, it seems natural to extend dissipativity 
+properties related to conservation, dissipation, and transport of mass and energy, it seems natural to extend dissipativity 
 theory to nonnegative and compartmental models which themselves behave in accordance to conservation laws. Specifically, 
-consider the dynamical systems of the from
+consider the dynamical systems of the form
 \begin{align}\label{sys:d1} 
 \dot{x}(t)&=f(x)+g(x)u, \quad x(0)=x_0, \quad t\geqslant 0 \\
 y(t)&=h(x)+j(x)u \nonumber
@@ -338,7 +428,92 @@ Consider the feedback nonnegative time-varying input nonlinearity $\sigma(\cdot,
 Consider Sys.\ref{sys:d1} is zero-state observable and exponentially dissipative with respect to the supply rate $s(u,y)=e^Tu-e^TMy$, where
 $M>>0$. Then the positive feedback interconnection of Sys.\ref{sys:d1} and $\sigma(\cdot,\cdot)$ is globally asymptotically stable.
 \end{thm}
-\section{Application in Chemical Process Control}
+\subsection{Generalized Vector Dissipativity}
+We extend the notion of dissipative dynamical systems to develop the generalized notion of vector dissipativity for large-scale nonlinear
+dynamical systems. Consider the large-scale nonlinear dynamical systems of the form
+\begin{align}\label{sys:d2}
+\dot{x}(t)&=F(x(t),u(t)) \\
+y(t)&=H(x(t),u(t))
+\end{align}
+where $x\in\D\subset \R{n}$,$u\in\mathcal{U}\subset\R{m}$, $y\in\mathcal{Y}\subset\R{l}$,$F:\D\times\mathcal{U}\rightarrow\R{n}$,
+$\map{H}{\D\times\mathcal{U}}{\mathcal{Y}}$, $F(0,0)=0$. Here, assume that it represents a large-scale dynamical system composed of q
+interconnected subsystems
+\begin{align}
+F_i(x,u_i)&=f_i(x_i)+I_i(x)+G_i(x_i)u_i \\
+H_i(x_i,u_i)&=h_i(x_i)+J_i(x_i)u_i
+\end{align}
+\begin{defi}
+The Sys.\ref{sys:d2} is vector dissipative with respect to the vector supply rate $S(u,y)$ if there exists a continuous, nonnegative
+definite vector function $V_s$, called a vector storage function, and an essentially nonnegative dissipation matrix W s.t $V_s(0)=0$,
+W is semistable, and the vector dissipation inequality is satisfied.
+\begin{equation}
+V_s(x(T))\LE e^{W(T-t_0)}V_s(x(t_0))+\int_{t_0}^{T}e^{W(T-t)}S(u(t),y(t))\diff t
+\end{equation}
+And define the vector available storage of the large-scale system by
+\begin{equation}
+V_a(x_0):=\underset{T\geqslant t_0,u(\cdot)}{\text{sup}}\left[-\int_{t_0}^{T}e^{-W(t-t_0)}S(u(t),y(t))\diff t\right]
+\end{equation}
+where $x(t_0)=x_0$. And the concept of vector required supply is defined by
+\begin{equation}
+V_r(x_0):=\underset{T\geqslant -t_0,u(\cdot)}{\text{inf}}\left[\int_{-T}^{t_0}e^{-W(t-t_0)}S(u(t),y(t))\diff t\right]
+\end{equation}
+where $x(-T)=0,x_(t_0)=x_0$.
+\end{defi}
+\begin{lem}
+The system is vector dissipative with respect to the vector supply rate $S(u,y)$ iff 
+\begin{equation}
+\dot{V}_s(x(t))\LE WV_s(x(t))+S(u(t),y(t))
+\end{equation}
+\end{lem}
+\begin{lem}
+Assume each disconnected subsystem is exponentially dissipative with respect to supply rate $s_i(u_i,y_i)$ and with a continuously
+differential storage function $v_{si}$. Furthermore, assume that the interconnection functions $I_i:\D\rightarrow \R{n_i}$ art s.t.
+\begin{equation}
+v'_{si}(x_i)I_i(x)\leqslant \sum\limits_{j=1}^{q}\xi_{ij}(x)v_{sj}(x_j)
+\end{equation}
+where $\xi_{ij}$ are bounded functions. If W is semistable with
+\begin{equation}
+W_{ij}=
+\begin{cases}
+-\varepsilon_i+\alpha_{ii} & \text{if } i = j \\
+\alpha_{ij} & \text{if } i \neq j
+\end{cases}
+\end{equation}
+where $\varepsilon_i > 0$ and $\alpha_{ij}:=\text{max}\{0,\sup_{x\in\D}\xi_{ij}(x)\}$. Then the large-scale system is vector 
+dissipativity.
+\end{lem}
+\begin{thm}
+Consider the large-scale system with $S,W$, then
+\begin{equation} \label{cond:ds}
+\int_{t_0}^{T}e^{W(t-t_0)}S(u(t),y(t))\diff t\GE 0
+\end{equation}
+for $x(t_0)=0$ iff $V_a(0)=0$ and $V_a(x)$ is finite. Moreover, if (\ref{cond:ds}) holds, then $V_a(x)$ is a vector storage function.
+\end{thm}
+\begin{thm}
+Assume the system completely reachable, then it is vector dissipative with respect to the vector supply rate $S(u,y)$ iff
+\begin{equation} \label{cond:ds2}
+0\LE V_r(x)\LE\infty
+\end{equation} 
+Moreover, if (\ref{cond:ds2}) holds, then $V_r(x)$ is a vector storage function. Finally, if $V_a(x)$ is a vector available storage 
+function, then
+\begin{equation}
+0\LE V_a(x)\LE V_s(x)\LE V_r(x)\LE \infty
+\end{equation}
+And let $M=\text{diag}[\mu_1,\cdots,\mu_q], 0\leqslant \mu_i \leqslant 1$, then every vector storage function has the form
+\begin{equation}
+V_s(x)=MV_a(x)+(I_q-M)V_r(x)
+\end{equation} 
+\end{thm}
+\begin{thm}
+Consider the system which zero-state observable and vector dissipative. Furthermore, assume W has an non-positive eigenvalue $-\alpha$ 
+and positive vector $p$. In addition, assume that there exist function $\map{k_i}{\mathcal{Y}_i}{\mathcal{U}_i}$ s.t. $k_i(0)=0$ and 
+$S_i(k_i(y_i),y_i)<0$. Then for all vector storage function $V_s$ the global storage function $v_s(x):=p^TV_s(x)$ is positive definite.
+\end{thm}
+\subsection{Thermodynamics and Vector Dissipativity}
+The fundamental and unifying concept in the analysis and control design of large-scale systems is the concept of energy. The energy
+of a state of a dynamical system is the measure of its ability to produce changes in its own state as well as changes in the system 
+states of its surroundings. As in thermodynamic systems, dynamical systems exhibit energy that becomes unavailable to do useful work. 
+\section{Future Application in Chemical Process Control}
 
 \bibliographystyle{unsrt}
 \bibliography{nonnegative_dynamic}
