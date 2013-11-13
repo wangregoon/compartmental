@@ -465,10 +465,10 @@ The system is vector dissipative with respect to the vector supply rate $S(u,y)$
 \dot{V}_s(x(t))\LE WV_s(x(t))+S(u(t),y(t))
 \end{equation}
 \end{lem}
-\begin{lem}
+\begin{lem}\label{lem:diss_cond}
 Assume each disconnected subsystem is exponentially dissipative with respect to supply rate $s_i(u_i,y_i)$ and with a continuously
 differential storage function $v_{si}$. Furthermore, assume that the interconnection functions $I_i:\D\rightarrow \R{n_i}$ art s.t.
-\begin{equation}
+\begin{equation}\label{eq:diss_cond}
 v'_{si}(x_i)I_i(x)\leqslant \sum\limits_{j=1}^{q}\xi_{ij}(x)v_{sj}(x_j)
 \end{equation}
 where $\xi_{ij}$ are bounded functions. If W is semistable with
@@ -513,8 +513,91 @@ $S_i(k_i(y_i),y_i)<0$. Then for all vector storage function $V_s$ the global sto
 The fundamental and unifying concept in the analysis and control design of large-scale systems is the concept of energy. The energy
 of a state of a dynamical system is the measure of its ability to produce changes in its own state as well as changes in the system 
 states of its surroundings. As in thermodynamic systems, dynamical systems exhibit energy that becomes unavailable to do useful work. 
+\begin{defi}
+The large-scale system \ref{sys:d2} is vector dissipative with respect to the vector supply rante $S(u,y)$ if there exists a
+continuous nonnegative definite vector function $V_s$ called a vector storage function, and a class $\mathcal{W}$ function $w$ s.t.
+$V_s(0)=0,w(0)=0$, the zero solution $r(t)\equiv 0$ to the comparison system 
+\begin{equation}
+\dot{r}(t)=w(r(t))
+\end{equation}
+is Lyapunove stable and the vector dissipation inequality is satisfied.
+\begin{equation}
+\dot{V_s}(x(t))\LE w(V_s(x(t)))+S(u(t),y(t))
+\end{equation}
+And the dissipation inequality can be rewritten in a power balance equation.
+\begin{equation}
+\dot{V_s}(x(t))= w(V_s(x(t)))-d(V_s(x(t)))+S(u(t),y(t))
+\end{equation}
+\end{defi}
+\begin{assume}\label{assume:1}
+The large-scale system from viewpoint of energy should meet following 3 assumption:
+\begin{enumerate}
+\item[(i)] The energy flow of the interconnection is conserved.
+\begin{equation}
+w_i(r)=\sum\limits_{j=1,j\neq i}^{q}\phi_{ij}(r)=\sum\limits_{j=1,j\neq i}^{q}[\sigma_{ij}(r)-\sigma_{ji}(r)]
+\end{equation}
+\item[(ii)] For the connected system, there is no energy exchange iff the two subsystem have equal energetic.
+\begin{equation}
+C_{ij}=1,\quad\phi_{ij}(V_s)=0\quad\text{iff}\quad V_{si}=V_{sj}
+\end{equation}
+\item[(iii)] Energy flows from high energetic subsystem to less energetic subsystems.
+\begin{equation}
+(V_{si}-V_{sj})\phi_{ij}(V_s)\leqslant 0
+\end{equation}
+\end{enumerate}
+\end{assume}
+\begin{defi}
+The entropy of large scale system can be defined as $\SE(V_s)=\tb{e}^T\ln (c\tb{e}+V_s)$, $c>0$.
+\end{defi}
+\begin{defi}
+The ectropy of large scale system can be defined as $\varepsilon(V_s)=\frac{1}{2}V_s^TV_s$.
+\end{defi}
+\begin{note}
+\tb{Entropy} can be thought of as a measure of the tendency of a large-scale dynamical system to lose the
+ability to do useful work and lose order and to settle to a more homogeneous state. Entropy is a measure of
+disorder. \tb{Ectropy} is a measure of the extent to which the system energy deviates from a a homogeneous 
+state. Thus, ectropy it the dual of entropy and is measure of the tendency of a large-scale dynamical system 
+to do useful work and grow more organized.
+\end{note}
+\begin{thm}
+Consider the large-scale system with assumption.\ref{assume:1}, the entropy and ectropy satisfy:
+\begin{align}
+\SE(V_s(t_2))&\geqslant \SE(V_s(t_1))+\int_{t_1}^{t_2}\tb{e}^TQ(t)\diff t \\
+\varepsilon(V_s(t_2))&\leqslant\varepsilon(V_s(t_1))+\int_{t_1}^{t_2}V_s^T(t)S(t)\diff t
+\end{align}
+where $Q:=\left[\frac{s_1-\sigma_{11}(V_s)}{c+V_{s1}},\cdots,\frac{s_q-\sigma_{qq}(V_s)}{c+V_{sq}}\right]$
+\end{thm}
+\begin{lem}
+Let $\D_c:=\{V_s:\tb{e}^TV_s=\beta>0\}$, then 
+\begin{equation}
+\underset{V_s\in\D_c}{\arg\min}(\varepsilon(V_s))=\underset{V_s\in\D_c}{\arg\max}(\SE(V_s))=V_s^*=\frac{\beta}{q}\tb{e}
+\end{equation}
+\end{lem}
 \section{Future Application in Chemical Process Control}
+When applying the dissipativity theory to the nonlinear chemical process control, the most difficult part is
+how to find the global dissipativity condition.  
 
+In Denny's approach, the system dissipativity analysis in performed on linearized system to determine the candidate 
+dissipative functions. And then a locally nonlinear state feedback law is designed though solving the robust nonlinear 
+$\mathcal{H}_\infty$ problem, which is used for dissipativity shaping. Finally, a decentralized control frame is formed. 
+It is like Down-to-Up method. 
+
+But when applying the compartmental modeling and vector dissipavitity method, it would like an Up-to-Down approach.
+The compartmental models of subsystems are obtained though first principle physical modeling. After that, the subsystem's
+storage function is already obtained (the energy state of compartmental model). And by the law of physics, the disconnected
+subsystems are dissipative. Then it needs to solve dissipative interconnection inequality (Lemma.\ref{lem:diss_cond}, 
+Eq.\ref{eq:diss_cond}) to obtain global dissipativity condition which turns out to be a constrain on subsystem's interconnection.
+In process control, the controller acts like the valve which controls the energy flow on interconnection or energy exchange
+with the environment (it plays the role of energy source and sinks). So the dissipativity constraint actually is put on
+the controller no matter what is the type of controller, state feedback control or MPC. This is just a rough idea. There are 
+many questions about this approach such like:
+\begin{enumerate}
+\item[\tb{Q1.}] Is compartmental model suitable for modeling typical chemical process units such like reactor, distillation,
+heat related devices, etc.
+\item[\tb{Q2.}] These results are for system analysis. How to integrate them to control design?
+\item[\tb{Q3.}] How to deal with some energy states which cannot be measurable, such like thermo energy?
+\item[$\cdots$] \tb{Is it worth to work on it???}
+\end{enumerate}    
 \bibliographystyle{unsrt}
 \bibliography{nonnegative_dynamic}
 
