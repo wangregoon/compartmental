@@ -67,7 +67,7 @@ Furthermore, in the case where A is a nonsingular Z-matrix, then the following s
 \subsection{Stability of linear case}
 Consider the linear dynamical system of the form
 \begin{equation}\label{sys1}
-\dot{x}=Ax,\qquad x(0)=x_0, t\geqslant 0
+\dot{x}=Ax,\quad x(0)=x_0,\quad t\geqslant 0
 \end{equation}
 \begin{lem}\label{lem2}
 Let $A\in \R{n\times n}$. $A$ is essentially nonnegative iff $e^{At}$ is nonnegative for all $t\geqslant 0$.
@@ -525,7 +525,7 @@ is Lyapunove stable and the vector dissipation inequality is satisfied.
 \dot{V_s}(x(t))\LE w(V_s(x(t)))+S(u(t),y(t))
 \end{equation}
 And the dissipation inequality can be rewritten in a power balance equation.
-\begin{equation}
+\begin{equation}\label{eq:large-scale}
 \dot{V_s}(x(t))= w(V_s(x(t)))-d(V_s(x(t)))+S(u(t),y(t))
 \end{equation}
 \end{defi}
@@ -575,28 +575,58 @@ Let $\D_c:=\{V_s:\tb{e}^TV_s=\beta>0\}$, then
 \end{lem}
 \section{Future Application in Chemical Process Control}
 When applying the dissipativity theory to the nonlinear chemical process control, the most difficult part is
-how to find the global dissipativity condition.  
+how to find the global dissipativity condition, which is involved plant and controller design. 
 
-In Denny's approach, the system dissipativity analysis in performed on linearized system to determine the candidate 
-dissipative functions. And then a locally nonlinear state feedback law is designed though solving the robust nonlinear 
-$\mathcal{H}_\infty$ problem, which is used for dissipativity shaping. Finally, a decentralized control frame is formed. 
-It is like Down-to-Up method. 
+In Denny's approach, the global dissipativity condition of linearized system is performed first. Then locally nonlinear
+$\mathcal{H}_\infty$ problem is solved to obtain local system's storage function (which involves both plant and controller).
+Finally local storage function is used for controller modification which can shape the global dissipavity condition respect 
+to nonlinearity. There are several disadvantages for this method: 1. The way to find dissipativity condition interweaves the 
+path of controller design, which would increase the complexity of this solution when the system reaches a certain scale; 
+2. linearization of nonlinear system may destroy the energy conservation law of first principle model; 3. there is no powerful 
+tool to solve HJB and the approximate method would generate a more conserved solution; 4. it is not flexible since it yields no 
+opportunities to apply other controller such as MPC, a powerful tool in multi-variable system.
 
-But when applying the compartmental modeling and vector dissipavitity method, it would like an Up-to-Down approach.
-The compartmental models of subsystems are obtained though first principle physical modeling. After that, the subsystem's
+The key to a flexible solution is how to decouple the controller design and global dissipativity condition. If the controllers
+obey the dissipativity interface, then the global disspativity condition is satisfied no matter what is the type of the controller.
+It need to work the constraints on the controller design.
+
+We need to dig into the physical natural of large scale system. We can rewrite the Eq.\ref{eq:large-scale}
+\begin{equation}
+\dot{V}_s(x(t))=w(V_s(x(t)))+P_a(t),\quad P_a(t)=S_\infty+S_c(u(t),y(t))-S_d(t)-d(V_s(x(t)))
+\end{equation}
+where $P_a$ denotes the supply rate by actuators, $s_\infty$ denotes the supply rate which maintain the steady system at the desired
+operator point, $d$ denotes the system dissipation, $S_d$ denotes supply induced by the system disturbance, $S_c$ denotes the controller
+supply rate. The aim of control is to overcome the system energy dissipation and reject disturbance by controller supply
+\begin{equation}
+S_c(u(t),y(t))=S_d(t)+d(V_s(x(t)))
+\end{equation}
+and at the sometime the interconnection $w$ should be controlled to hold essentially nonnegative condition in order to ensure system stability. 
+In this sense, the controller can be divided into two types: supply controller which controls the energy to compensation of system energy loss 
+and interaction controller which controls the energy flow between the subsystem it doesn't supply any energy into the system but just acts like
+the energy valve which control's the energy flow rate. From the sense of intuition, the Assumption.\ref{assume:1} would be the constraint to
+decouple the dissipativity condition and control design. It needs to be mathematically proved. 
+  
+When applying the compartmental modeling and vector dissipavitity method,
+the compartmental models of subsystems are obtained though first principle physical modeling. After that, the subsystem's
 storage function is already obtained (the energy state of compartmental model). And by the law of physics, the disconnected
 subsystems are dissipative. Then it needs to solve dissipative interconnection inequality (Lemma.\ref{lem:diss_cond}, 
 Eq.\ref{eq:diss_cond}) to obtain global dissipativity condition which turns out to be a constrain on subsystem's interconnection.
-In process control, the controller acts like the valve which controls the energy flow on interconnection or energy exchange
-with the environment (it plays the role of energy source and sinks). So the dissipativity constraint actually is put on
-the controller no matter what is the type of controller, state feedback control or MPC. This is just a rough idea. There are 
-many questions about this approach such like:
+So the dissipativity constraint actually is put on the interaction controller. Regarding to the supply controller design, the port-Hamiltonian
+based control method was already developed by Ortega, Van der Schaft \& Maschke.
+%From Van der Schaft's port-Hamiltonian theory, controllers act like compartment directed connected to the physical plant. The 
+%steady state of plant and controller is the global minimal energy point of the whole system. Energy flow of interconnection is decided
+%by the Casimirs function which is invariant along the state trajectory. 
+
+This is just a rough idea. There are many questions about this approach such like:
 \begin{enumerate}
 \item[\tb{Q1.}] Is compartmental model suitable for modeling typical chemical process units such like reactor, distillation,
 heat related devices, etc.
-\item[\tb{Q2.}] These results are for system analysis. How to integrate them to control design?
-\item[\tb{Q3.}] How to deal with some energy states which cannot be measurable, such like thermo energy?
-\item[$\cdots$] \tb{Is it worth to work on it???}
+%\item[\tb{Q2.}] These results are for system analysis. How to integrate them to control design?
+\item[\tb{Q2.}] How to deal with some energy states which cannot be measurable, such like thermo energy?
+\item[\tb{Q3.}] How to make the operating point to be the global energy minimum?
+\item[\tb{Q4.}] How to get the robust minimal performance? 
+\item[\tb{Q5.}] How to decide the controller's type?
+\item[$\cdots$] \tb{Is it worth to work on???}
 \end{enumerate}    
 \bibliographystyle{unsrt}
 \bibliography{nonnegative_dynamic}
